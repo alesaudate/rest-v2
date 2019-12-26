@@ -3,6 +3,9 @@ package app.car.cap03.interfaces;
 
 import app.car.cap03.domain.TravelRequest;
 import app.car.cap03.domain.TravelService;
+import app.car.cap03.interfaces.input.TravelRequestInput;
+import app.car.cap03.interfaces.mapping.TravelRequestMapper;
+import app.car.cap03.interfaces.output.TravelRequestOutput;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.MediaType;
@@ -24,7 +27,7 @@ public class TravelRequestAPI {
     TravelRequestMapper mapper;
 
     @PostMapping
-    public EntityModel<TravelRequestOutput> makeTravelRequest (@RequestBody  TravelRequestInput travelRequestInput) {
+    public EntityModel<TravelRequestOutput> makeTravelRequest (@RequestBody TravelRequestInput travelRequestInput) {
         TravelRequest request = travelService.saveTravelRequest(mapper.map(travelRequestInput));
         TravelRequestOutput output = mapper.map(request);
         return mapper.buildOutputModel(request, output);
