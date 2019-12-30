@@ -4,6 +4,7 @@ import app.car.cap06.domain.Passenger;
 import app.car.cap06.domain.PassengerRepository;
 import java.util.List;
 import java.util.Optional;
+import javax.annotation.security.RolesAllowed;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -30,6 +31,7 @@ public class PassengerAPI {
     }
 
     @PostMapping
+    @RolesAllowed("ROLE_ADMIN")
     public Passenger createPassenger(@RequestBody Passenger passenger) {
         return passengerRepository.save(passenger);
     }
