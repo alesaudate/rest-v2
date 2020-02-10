@@ -1,0 +1,205 @@
+{
+  "geocoded_waypoints" : [
+    {
+      "geocoder_status" : "OK",
+      "place_id" : "ChIJPcyqh8dZzpQRchzSeWqiB2s",
+      "types" : [ "street_address" ]
+    },
+    {
+      "geocoder_status" : "OK",
+      "place_id" : "ChIJn_2B9MdZzpQRMEj1Td6_gpk",
+      "types" : [ "premise" ]
+    }
+  ],
+  "routes" : [
+    {
+      "bounds" : {
+        "northeast" : {
+          "lat" : -23.5630894,
+          "lng" : -46.6490407
+        },
+        "southwest" : {
+          "lat" : -23.566084,
+          "lng" : -46.65196940000001
+        }
+      },
+      "copyrights" : "Dados cartográficos ©2019 Google",
+      "legs" : [
+        {
+          "distance" : {
+            "text" : "1,0 km",
+            "value" : 988
+          },
+          "duration" : {
+            "text" : "6 minutos",
+            "value" : 373
+          },
+          "end_address" : "Av. Paulista, 1000 - Bela Vista, São Paulo - SP, 01310-100, Brasil",
+          "end_location" : {
+            "lat" : -23.5651059,
+            "lng" : -46.65196940000001
+          },
+          "start_address" : "Av. Paulista, 900 - Bela Vista, São Paulo - SP, 01310-100, Brasil",
+          "start_location" : {
+            "lat" : -23.5651579,
+            "lng" : -46.6510344
+          },
+          "steps" : [
+            {
+              "distance" : {
+                "text" : "0,1 km",
+                "value" : 95
+              },
+              "duration" : {
+                "text" : "1 min",
+                "value" : 34
+              },
+              "end_location" : {
+                "lat" : -23.5647671,
+                "lng" : -46.6503345
+              },
+              "html_instructions" : "Siga na direção \u003cb\u003esudeste\u003c/b\u003e para a \u003cb\u003eR. São Carlos do Pinhal\u003c/b\u003e\u003cdiv style=\"font-size:0.9em\"\u003eEstrada de uso restrito\u003c/div\u003e",
+              "polyline" : {
+                "points" : "fqynC|ov{GHGBE@GAIEGuAcB"
+              },
+              "start_location" : {
+                "lat" : -23.5651579,
+                "lng" : -46.6510344
+              },
+              "travel_mode" : "DRIVING"
+            },
+            {
+              "distance" : {
+                "text" : "0,1 km",
+                "value" : 136
+              },
+              "duration" : {
+                "text" : "1 min",
+                "value" : 51
+              },
+              "end_location" : {
+                "lat" : -23.563945,
+                "lng" : -46.6513273
+              },
+              "html_instructions" : "Vire à \u003cb\u003eesquerda\u003c/b\u003e na \u003cb\u003eR. São Carlos do Pinhal\u003c/b\u003e",
+              "maneuver" : "turn-left",
+              "polyline" : {
+                "points" : "xnynCpkv{Gk@t@KLsA`BIJOT"
+              },
+              "start_location" : {
+                "lat" : -23.5647671,
+                "lng" : -46.6503345
+              },
+              "travel_mode" : "DRIVING"
+            },
+            {
+              "distance" : {
+                "text" : "0,1 km",
+                "value" : 128
+              },
+              "duration" : {
+                "text" : "1 min",
+                "value" : 53
+              },
+              "end_location" : {
+                "lat" : -23.5630894,
+                "lng" : -46.6504931
+              },
+              "html_instructions" : "Vire à \u003cb\u003edireita\u003c/b\u003e na \u003cb\u003eAlameda Campinas\u003c/b\u003e",
+              "maneuver" : "turn-right",
+              "polyline" : {
+                "points" : "riynCxqv{GgCeCa@a@"
+              },
+              "start_location" : {
+                "lat" : -23.563945,
+                "lng" : -46.6513273
+              },
+              "travel_mode" : "DRIVING"
+            },
+            {
+              "distance" : {
+                "text" : "0,2 km",
+                "value" : 200
+              },
+              "duration" : {
+                "text" : "1 min",
+                "value" : 57
+              },
+              "end_location" : {
+                "lat" : -23.5642985,
+                "lng" : -46.6490407
+              },
+              "html_instructions" : "Vire à \u003cb\u003edireita\u003c/b\u003e na 1ª rua transversal para \u003cb\u003eAlameda Ribeirão Preto\u003c/b\u003e",
+              "maneuver" : "turn-right",
+              "polyline" : {
+                "points" : "hdynCplv{Gp@{@p@{@|@kA~@iANS"
+              },
+              "start_location" : {
+                "lat" : -23.5630894,
+                "lng" : -46.6504931
+              },
+              "travel_mode" : "DRIVING"
+            },
+            {
+              "distance" : {
+                "text" : "0,3 km",
+                "value" : 267
+              },
+              "duration" : {
+                "text" : "2 minutos",
+                "value" : 111
+              },
+              "end_location" : {
+                "lat" : -23.566084,
+                "lng" : -46.6507953
+              },
+              "html_instructions" : "Vire à \u003cb\u003edireita\u003c/b\u003e na \u003cb\u003eAlameda Joaquim Eugênio de Lima\u003c/b\u003e",
+              "maneuver" : "turn-right",
+              "polyline" : {
+                "points" : "zkynCncv{Gt@r@^^rArA~A|ATTbAbA"
+              },
+              "start_location" : {
+                "lat" : -23.5642985,
+                "lng" : -46.6490407
+              },
+              "travel_mode" : "DRIVING"
+            },
+            {
+              "distance" : {
+                "text" : "0,2 km",
+                "value" : 162
+              },
+              "duration" : {
+                "text" : "1 min",
+                "value" : 67
+              },
+              "end_location" : {
+                "lat" : -23.5651059,
+                "lng" : -46.65196940000001
+              },
+              "html_instructions" : "Vire à \u003cb\u003edireita\u003c/b\u003e na \u003cb\u003eAv. Paulista\u003c/b\u003e\u003cdiv style=\"font-size:0.9em\"\u003eFechada: Domingos 10:00 – 19:00\u003c/div\u003e\u003cdiv style=\"font-size:0.9em\"\u003eO destino estará à direita\u003c/div\u003e",
+              "maneuver" : "turn-right",
+              "polyline" : {
+                "points" : "~vynCnnv{G{@hAIJIH_BnBCDGHEH"
+              },
+              "start_location" : {
+                "lat" : -23.566084,
+                "lng" : -46.6507953
+              },
+              "travel_mode" : "DRIVING"
+            }
+          ],
+          "traffic_speed_entry" : [],
+          "via_waypoint" : []
+        }
+      ],
+      "overview_polyline" : {
+        "points" : "fqynC|ov{GLM?QEGuAcBk@t@_BnBY`@iDgDbBwB|BuCNSt@r@rBrBtBrBbAbA{@hASTqBhC"
+      },
+      "summary" : "Alameda Joaquim Eugênio de Lima",
+      "warnings" : [],
+      "waypoint_order" : []
+    }
+  ],
+  "status" : "OK"
+}
