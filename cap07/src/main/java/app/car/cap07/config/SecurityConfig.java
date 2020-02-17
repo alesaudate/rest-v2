@@ -32,18 +32,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.
                 authorizeRequests()
-                .anyRequest()
-                .permitAll();
-
-
-
-        /*.antMatchers("/swagger-ui.html", "/v2/api-docs/")
+                    .antMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**")
                     .permitAll()
                 .anyRequest()
                     .authenticated()
                     .and()
                     .httpBasic();
-     */
 
     }
 
