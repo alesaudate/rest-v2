@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 
 @Component
 public class LocaleResolver extends AcceptHeaderLocaleResolver {
@@ -28,7 +29,7 @@ public class LocaleResolver extends AcceptHeaderLocaleResolver {
         }
         List<Locale.LanguageRange> list = Locale.LanguageRange.parse(acceptLanguageHeader);
         Locale locale = Locale.lookup(list, ACCEPTED_LOCALES);
-        return locale;
+        return Optional.ofNullable(locale).orElse(DEFAULT_LOCALE);
     }
 
 
