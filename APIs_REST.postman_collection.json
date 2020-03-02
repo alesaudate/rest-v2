@@ -1,0 +1,303 @@
+{
+	"info": {
+		"_postman_id": "5168c34d-e389-48f4-9ff0-1d12c44fa715",
+		"name": "APIs_REST",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Motoristas",
+			"item": [
+				{
+					"name": "Listar motoristas",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{host}}/drivers",
+						"description": "Utilizamos esta API para listar os motoristas que estão na base."
+					},
+					"response": []
+				},
+				{
+					"name": "Criar motorista",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"string\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{host}}/drivers"
+					},
+					"response": []
+				},
+				{
+					"name": "Localizar um motorista específico",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{host}}/drivers/1"
+					},
+					"response": []
+				},
+				{
+					"name": "Atualizar motorista",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"string\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{host}}/drivers/1"
+					},
+					"response": []
+				},
+				{
+					"name": "Apagar motorista",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "{{host}}/drivers/1"
+					},
+					"response": []
+				},
+				{
+					"name": "Atualizar motorista (incremental)",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"string\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{host}}/drivers/1"
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Requisições de viagens",
+			"item": [
+				{
+					"name": "Criar requisição de viagem",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": {
+								"password": "password",
+								"username": "admin"
+							}
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept-Language",
+								"type": "text",
+								"value": "zh"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"passengerId\": 1,\n\t\"destination\": \"Avenida Faria Lima, 1300\",\n\t\"origin\": \"Avenida Paulista, 100\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{host}}/travelRequests"
+					},
+					"response": []
+				},
+				{
+					"name": "Recuperar requisições de viagens próximas",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/travelRequests/close?currentAddress",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"travelRequests",
+								"close"
+							],
+							"query": [
+								{
+									"key": "currentAddress",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Passageiros",
+			"item": [
+				{
+					"name": "Listar passageiros",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{host}}/passengers"
+					},
+					"response": []
+				},
+				{
+					"name": "Criar passageiro",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"string\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{host}}/passengers"
+					},
+					"response": []
+				},
+				{
+					"name": "Localizar passageiro específico",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{host}}/passengers/1"
+					},
+					"response": []
+				},
+				{
+					"name": "Atualizar passageiro",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"string\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{host}}/passengers/1"
+					},
+					"response": []
+				},
+				{
+					"name": "Apagar passageiro",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "{{host}}/passengers/1"
+					},
+					"response": []
+				},
+				{
+					"name": "Atualizar passageiro (incremental)",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"string\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{host}}/passengers/1"
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"variable": [
+		{
+			"id": "d086827f-e62f-414e-af41-8fbb18b336f0",
+			"key": "host",
+			"value": "http",
+			"type": "string",
+			"disabled": true
+		}
+	],
+	"protocolProfileBehavior": {}
+}

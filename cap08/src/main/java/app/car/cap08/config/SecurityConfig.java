@@ -1,4 +1,4 @@
-package app.car.cap07.config;
+package app.car.cap08.config;
 
 import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,12 +30,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
-        http.
-                authorizeRequests()
+        http
+                .authorizeRequests()
+                    .antMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**")
+                    .permitAll()
                 .anyRequest()
-                .authenticated()
-                .and()
-                .httpBasic();
+                    .authenticated()
+                    .and()
+                    .httpBasic();
 
     }
 

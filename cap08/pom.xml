@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>app.car</groupId>
-	<artifactId>cap07</artifactId>
+	<artifactId>cap08</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>cap07</name>
+	<name>cap08</name>
 	<description>Demo project for Spring Boot</description>
 
 	<properties>
@@ -56,6 +56,14 @@
 			<groupId>com.jayway.jsonpath</groupId>
 			<artifactId>json-path</artifactId>
 		</dependency>
+
+
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-ui</artifactId>
+			<version>1.2.32</version>
+		</dependency>
+
 
 		<dependency>
 			<groupId>com.github.tomakehurst</groupId>
