@@ -2,6 +2,7 @@ package app.car.cap09.interfaces.incoming;
 
 import app.car.cap09.domain.Driver;
 import app.car.cap09.interfaces.incoming.errorhandling.ErrorResponse;
+import app.car.cap09.interfaces.incoming.output.Drivers;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -16,7 +17,7 @@ public interface DriverAPI {
 
 
     @Operation(description = "Lista todos os motoristas disponíveis")
-    CollectionModel<EntityModel<Driver>> listDrivers(int page);
+    Drivers listDrivers(int page);
 
 
     @Operation(

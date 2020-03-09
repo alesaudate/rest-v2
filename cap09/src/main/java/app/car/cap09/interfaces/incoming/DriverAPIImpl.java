@@ -2,6 +2,7 @@ package app.car.cap09.interfaces.incoming;
 
 import app.car.cap09.domain.Driver;
 import app.car.cap09.domain.DriverRepository;
+import app.car.cap09.interfaces.incoming.output.Drivers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -33,19 +34,18 @@ public class DriverAPIImpl implements DriverAPI {
     DriverRepository driverRepository;
 
     @GetMapping
-    public CollectionModel<EntityModel<Driver>> listDrivers(@RequestParam("page") int page) {
+    public Drivers listDrivers(@RequestParam(name = "page", defaultValue = "0") int page) {
         Page<Driver> driverPage = driverRepository.findAll(PageRequest.of(page, PAGE_SIZE));
 
         List<EntityModel<Driver>> driverList = new ArrayList<>();
         for (Driver driver : driverPage.getContent()) {
-            EntityModel<Driver> objectEntityModel = new EntityModel(driver);
-            driverList.add(objectEntityModel);
+            driverList.add(new EntityModel<>(driver));
         }
 
         Link lastPageLink = linkTo(methodOn(DriverAPIImpl.class).listDrivers(driverPage.getTotalPages() - 1))
                 .withRel("lastPage");
 
-        return new CollectionModel<>(driverList, lastPageLink);
+        return new Drivers(driverList, lastPageLink);
     }
 
     @GetMapping("/{id}")

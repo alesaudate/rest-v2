@@ -1,37 +1,21 @@
 package app.car.cap09.interfaces.incoming.output;
 
 import app.car.cap09.domain.Driver;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonUnwrapped;
-import com.fasterxml.jackson.annotation.JsonValue;
-import lombok.NoArgsConstructor;
-import org.springframework.hateoas.CollectionModel;
+import lombok.Getter;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
-import org.springframework.hateoas.Links;
-
-import java.util.Collection;
-import java.util.stream.Collectors;
+import java.util.List;
 
 
-@NoArgsConstructor
-public class Drivers extends CollectionModel<EntityModel<Driver>> {
+@Getter
+public class Drivers{
 
+    private List<EntityModel<Driver>> drivers;
 
-    public Drivers(Iterable<EntityModel<Driver>> content, Link... links) {
-        super(content, links);
-    }
+    private Link[] links;
 
-    @Override
-    @JsonUnwrapped
-    public Collection<EntityModel<Driver>> getContent() {
-        return super.getContent();
-    }
-
-
-    @Override
-    @JsonProperty("links")
-    public Links getLinks() {
-        return super.getLinks();
+    public Drivers(List<EntityModel<Driver>> content, Link... links) {
+        this.drivers = content;
+        this.links = links;
     }
 }
