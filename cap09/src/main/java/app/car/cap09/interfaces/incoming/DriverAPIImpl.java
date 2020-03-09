@@ -1,13 +1,12 @@
 package app.car.cap09.interfaces.incoming;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
-
 import app.car.cap09.domain.Driver;
 import app.car.cap09.domain.DriverRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -15,7 +14,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Service
 @RestController()
@@ -28,14 +33,19 @@ public class DriverAPIImpl implements DriverAPI {
     DriverRepository driverRepository;
 
     @GetMapping
-    public CollectionModel<Driver> listDrivers(@RequestParam("page") int page) {
+    public CollectionModel<EntityModel<Driver>> listDrivers(@RequestParam("page") int page) {
         Page<Driver> driverPage = driverRepository.findAll(PageRequest.of(page, PAGE_SIZE));
-        CollectionModel<Driver> collectionModel = new CollectionModel<>(driverPage.getContent());
+
+        List<EntityModel<Driver>> driverList = new ArrayList<>();
+        for (Driver driver : driverPage.getContent()) {
+            EntityModel<Driver> objectEntityModel = new EntityModel(driver);
+            driverList.add(objectEntityModel);
+        }
 
         Link lastPageLink = linkTo(methodOn(DriverAPIImpl.class).listDrivers(driverPage.getTotalPages() - 1))
                 .withRel("lastPage");
 
-        return collectionModel.add(lastPageLink);
+        return new CollectionModel<>(driverList, lastPageLink);
     }
 
     @GetMapping("/{id}")

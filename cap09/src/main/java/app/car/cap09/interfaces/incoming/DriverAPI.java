@@ -9,13 +9,14 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
 
 @Tag(name = "Driver API", description = "Manipula dados de motoristas.")
 public interface DriverAPI {
 
 
     @Operation(description = "Lista todos os motoristas disponíveis")
-    CollectionModel<Driver> listDrivers(int page);
+    CollectionModel<EntityModel<Driver>> listDrivers(int page);
 
 
     @Operation(
