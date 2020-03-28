@@ -1,4 +1,4 @@
-package app.car.cap07.interfaces.incoming.output;
+package app.car.cap08.interfaces.incoming.output;
 
 import app.car.cap07.domain.TravelRequestStatus;
 import java.util.Date;

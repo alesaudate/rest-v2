@@ -7,7 +7,7 @@ import app.car.cap06.interfaces.incoming.input.TravelRequestInput;
 import app.car.cap06.interfaces.incoming.mapping.TravelRequestMapper;
 import app.car.cap06.interfaces.incoming.output.TravelRequestOutput;
 import java.util.List;
-import javax.annotation.security.RolesAllowed;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.MediaType;
@@ -38,9 +38,9 @@ public class TravelRequestAPI {
     }
 
 
-    @GetMapping("/close")
-    public List<EntityModel<TravelRequestOutput>> listCloseRequests(@RequestParam String currentAddress) {
-        List<TravelRequest> requests = travelService.listCloseTravelRequests(currentAddress);
+    @GetMapping("/nearby")
+    public List<EntityModel<TravelRequestOutput>> listNearbyRequests(@RequestParam String currentAddress) {
+        List<TravelRequest> requests = travelService.listNearbyTravelRequests(currentAddress);
         return mapper.buildOutputModel(requests);
     }
 }

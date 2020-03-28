@@ -34,9 +34,9 @@ public class TravelRequestAPI {
     }
 
 
-    @GetMapping("/close")
-    public List<EntityModel<TravelRequestOutput>> listCloseRequests(@RequestParam String currentAddress) {
-        List<TravelRequest> requests = travelService.listCloseTravelRequests(currentAddress);
+    @GetMapping("/nearby")
+    public List<EntityModel<TravelRequestOutput>> listNearbyRequests(@RequestParam String currentAddress) {
+        List<TravelRequest> requests = travelService.listNearbyTravelRequests(currentAddress);
         return mapper.buildOutputModel(requests);
     }
 }

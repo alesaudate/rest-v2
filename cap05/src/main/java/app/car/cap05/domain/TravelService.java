@@ -27,7 +27,7 @@ public class TravelService {
     }
 
 
-    public List<TravelRequest> listCloseTravelRequests(String currentAddress) {
+    public List<TravelRequest> listNearbyTravelRequests(String currentAddress) {
         List<TravelRequest> requests = travelRequestRepository.findByStatus(TravelRequestStatus.CREATED);
         return requests
                 .stream()

@@ -50,7 +50,7 @@ public class TravelRequestAPITestIT {
     }
 
     @Test
-    public void testFindCloseTravelRequests() {
+    public void testFindNearbyTravelRequests() {
 
         setupServer();
         given()
@@ -77,7 +77,7 @@ public class TravelRequestAPITestIT {
                 ;
 
         given()
-                .get("/travelRequests/close?currentAddress=Avenida Paulista, 900")
+                .get("/travelRequests/nearby?currentAddress=Avenida Paulista, 900")
                 .then()
                 .statusCode(200)
                 .body("[0].id", notNullValue())

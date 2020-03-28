@@ -1,4 +1,4 @@
-package app.car.cap09.interfaces.incoming;
+package app.car.cap08.interfaces.incoming;
 
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
@@ -7,7 +7,7 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
-import app.car.cap09.interfaces.outcoming.GMapsService;
+import app.car.cap08.interfaces.outcoming.GMapsService;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
@@ -50,7 +50,7 @@ public class TravelRequestAPITestIT {
     }
 
     @Test
-    public void testFindCloseTravelRequests() {
+    public void testFindNearbyTravelRequests() {
 
         setupServer();
         given()
@@ -77,7 +77,7 @@ public class TravelRequestAPITestIT {
                 ;
 
         given()
-                .get("/travelRequests/close?currentAddress=Avenida Paulista, 900")
+                .get("/travelRequests/nearby?currentAddress=Avenida Paulista, 900")
                 .then()
                 .statusCode(200)
                 .body("[0].id", notNullValue())
