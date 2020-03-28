@@ -8,6 +8,7 @@ import app.car.cap08.interfaces.incoming.input.TravelRequestInput;
 import app.car.cap08.interfaces.incoming.output.TravelRequestOutput;
 import java.util.List;
 import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;

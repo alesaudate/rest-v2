@@ -1,11 +1,11 @@
-package app.car.cap08.interfaces.incoming.mapping;
+package app.car.cap07.interfaces.incoming.mapping;
 
 import app.car.cap07.domain.Passenger;
 import app.car.cap07.domain.PassengerRepository;
 import app.car.cap07.domain.TravelRequest;
-import app.car.cap08.interfaces.incoming.PassengerAPI;
-import app.car.cap08.interfaces.incoming.input.TravelRequestInput;
-import app.car.cap08.interfaces.incoming.output.TravelRequestOutput;
+import app.car.cap07.interfaces.incoming.PassengerAPI;
+import app.car.cap07.interfaces.incoming.input.TravelRequestInput;
+import app.car.cap07.interfaces.incoming.output.TravelRequestOutput;
 import java.util.List;
 import java.util.stream.Collectors;
 

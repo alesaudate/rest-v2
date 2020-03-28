@@ -1,4 +1,4 @@
-package app.car.cap08.interfaces.incoming;
+package app.car.cap07.interfaces.incoming;
 
 import app.car.cap07.domain.Passenger;
 import app.car.cap07.domain.PassengerRepository;
