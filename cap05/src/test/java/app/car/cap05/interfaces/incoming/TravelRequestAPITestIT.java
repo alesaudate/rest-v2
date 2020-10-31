@@ -1,25 +1,27 @@
 package app.car.cap05.interfaces.incoming;
 
 
-import static com.github.tomakehurst.wiremock.client.WireMock.*;
-import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
-import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
-
-import app.car.cap05.interfaces.outcoming.GMapsService;
 import com.github.tomakehurst.wiremock.WireMockServer;
+import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
-import java.io.InputStream;
-import lombok.SneakyThrows;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.core.io.ClassPathResource;
+import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
+import org.springframework.test.context.ActiveProfiles;
+
+import static com.github.tomakehurst.wiremock.client.WireMock.*;
+import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+import static app.car.cap05.infrastructure.FileUtils.loadFileContents;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@AutoConfigureWireMock(port = WireMockConfiguration.DYNAMIC_PORT)
+@ActiveProfiles("test")
 public class TravelRequestAPITestIT {
 
 
@@ -27,26 +29,11 @@ public class TravelRequestAPITestIT {
     private int port;
 
     @Autowired
-    private GMapsService service;
-
-    private static WireMockServer server;
-
-    @BeforeAll
-    public static void startWireMock() {
-        server = new WireMockServer(wireMockConfig().dynamicPort());
-        server.start();
-    }
-
-    @AfterAll
-    public static void stopWiremock() {
-        server.stop();
-    }
+    private WireMockServer server;
 
     @BeforeEach
     public void setup() {
         RestAssured.port = port;
-        service.setGMapsHost("http://localhost:" + server.port());
-
     }
 
     @Test
@@ -55,7 +42,7 @@ public class TravelRequestAPITestIT {
         setupServer();
         given()
                 .contentType(ContentType.JSON)
-                .body(loadInput("/requests/passengers_api/create_new_passenger.json"))
+                .body(loadFileContents("/requests/passengers_api/create_new_passenger.json"))
                 .post("/passengers")
                 .then()
                 .statusCode(200)
@@ -65,7 +52,7 @@ public class TravelRequestAPITestIT {
 
         given()
                 .contentType(ContentType.JSON)
-                .body(loadInput("/requests/travel_requests_api/create_new_request.json"))
+                .body(loadFileContents("/requests/travel_requests_api/create_new_request.json"))
                 .post("/travelRequests")
                 .then()
                 .statusCode(200)
@@ -95,19 +82,12 @@ public class TravelRequestAPITestIT {
             .withQueryParam("origin", equalTo("Avenida Paulista, 900"))
             .withQueryParam("destination", equalTo("Avenida Paulista, 1000"))
             .withQueryParam("key", equalTo("chaveGoogle"))
-            .willReturn(okJson(loadInput("/responses/gmaps/sample_response.json")))
+            .willReturn(okJson(loadFileContents("/responses/gmaps/sample_response.json")))
         );
     }
 
 
-    @SneakyThrows
-    String loadInput(String fileName) {
 
-        InputStream is = new ClassPathResource(fileName).getInputStream();
-        byte[] data = new byte[is.available()];
-        is.read(data);
-        return new String(data);
-    }
 
 
 }

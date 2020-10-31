@@ -1,25 +1,30 @@
 package app.car.cap07.interfaces.incoming;
 
 
+import com.github.tomakehurst.wiremock.WireMockServer;
+import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
+import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
+import org.springframework.test.context.ActiveProfiles;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import static app.car.cap07.infrastructure.FileUtils.loadFileContents;
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
-import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
-import app.car.cap07.interfaces.outcoming.GMapsService;
-import com.github.tomakehurst.wiremock.WireMockServer;
-import io.restassured.RestAssured;
-import io.restassured.http.ContentType;
-import java.io.InputStream;
-import lombok.SneakyThrows;
-import org.junit.jupiter.api.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.core.io.ClassPathResource;
-
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@AutoConfigureWireMock(port = WireMockConfiguration.DYNAMIC_PORT)
+@ActiveProfiles("test")
 public class TravelRequestAPITestIT {
 
 
@@ -27,46 +32,44 @@ public class TravelRequestAPITestIT {
     private int port;
 
     @Autowired
-    private GMapsService service;
+    private WireMockServer server;
 
-    private static WireMockServer server;
-
-    @BeforeAll
-    public static void startWireMock() {
-        server = new WireMockServer(wireMockConfig().dynamicPort());
-        server.start();
-    }
-
-    @AfterAll
-    public static void stopWiremock() {
-        server.stop();
-    }
+    private String url;
 
     @BeforeEach
     public void setup() {
-        RestAssured.port = port;
-        service.setGMapsHost("http://localhost:" + server.port());
-
+        url = "https://localhost:" + port;
+        RestAssured.useRelaxedHTTPSValidation();
     }
 
     @Test
     public void testFindNearbyTravelRequests() {
 
         setupServer();
-        given()
+        String passengerId =
+                given()
+                .auth().preemptive().basic("admin", "password")
                 .contentType(ContentType.JSON)
-                .body(loadInput("/requests/passengers_api/create_new_passenger.json"))
-                .post("/passengers")
+                .body(loadFileContents("/requests/passengers_api/create_new_passenger.json"))
+                .post(url + "/passengers")
                 .then()
                 .statusCode(200)
                 .body("id", notNullValue())
                 .body("name", is("Alexandre Saudate"))
+                .extract()
+                .body()
+                .jsonPath().getString("id")
         ;
 
-        given()
+        Map<String, String> data = new HashMap<>();
+        data.put("passengerId", passengerId);
+
+        Integer travelRequestId =
+                given()
+                .auth().preemptive().basic("admin", "password")
                 .contentType(ContentType.JSON)
-                .body(loadInput("/requests/travel_requests_api/create_new_request.json"))
-                .post("/travelRequests")
+                .body(loadFileContents("/requests/travel_requests_api/create_new_request.json", data))
+                .post(url + "/travelRequests")
                 .then()
                 .statusCode(200)
                 .body("id", notNullValue())
@@ -74,13 +77,17 @@ public class TravelRequestAPITestIT {
                 .body("destination", is("Avenida Ipiranga, 100"))
                 .body("status", is("CREATED"))
                 .body("_links.passenger.title", is("Alexandre Saudate"))
+                .extract()
+                .jsonPath()
+                .get("id")
                 ;
 
         given()
-                .get("/travelRequests/nearby?currentAddress=Avenida Paulista, 900")
+                .auth().preemptive().basic("admin", "password")
+                .get(url + "/travelRequests/nearby?currentAddress=Avenida Paulista, 900")
                 .then()
                 .statusCode(200)
-                .body("[0].id", notNullValue())
+                .body("[0].id", is(travelRequestId))
                 .body("[0].origin", is("Avenida Paulista, 1000"))
                 .body("[0].destination", is("Avenida Ipiranga, 100"))
                 .body("[0].status", is("CREATED"))
@@ -95,18 +102,8 @@ public class TravelRequestAPITestIT {
             .withQueryParam("origin", equalTo("Avenida Paulista, 900"))
             .withQueryParam("destination", equalTo("Avenida Paulista, 1000"))
             .withQueryParam("key", equalTo("chaveGoogle"))
-            .willReturn(okJson(loadInput("/responses/gmaps/sample_response.json")))
+            .willReturn(okJson(loadFileContents("/responses/gmaps/sample_response.json")))
         );
-    }
-
-
-    @SneakyThrows
-    String loadInput(String fileName) {
-
-        InputStream is = new ClassPathResource(fileName).getInputStream();
-        byte[] data = new byte[is.available()];
-        is.read(data);
-        return new String(data);
     }
 
 

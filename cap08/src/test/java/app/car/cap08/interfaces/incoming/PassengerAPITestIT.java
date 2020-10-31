@@ -16,9 +16,12 @@ public class PassengerAPITestIT {
     @LocalServerPort
     private int port;
 
+    private String url;
+
     @BeforeEach
     public void setup() {
-        RestAssured.port = port;
+        url = "https://localhost:" + port;
+        RestAssured.useRelaxedHTTPSValidation();
     }
 
     @Test
@@ -29,9 +32,10 @@ public class PassengerAPITestIT {
 
 
         given()
+                .auth().preemptive().basic("admin", "password")
                 .contentType(io.restassured.http.ContentType.JSON)
                 .body(createPassengerJSON)
-                .post("/passengers")
+                .post(url + "/passengers")
                 .then()
                 .statusCode(200)
                 .body("id", notNullValue())
