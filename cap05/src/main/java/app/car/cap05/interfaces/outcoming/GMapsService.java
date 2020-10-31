@@ -2,13 +2,13 @@ package app.car.cap05.interfaces.outcoming;
 
 
 import com.jayway.jsonpath.JsonPath;
-import java.util.List;
-import java.util.stream.Collectors;
-import lombok.Setter;
 import net.minidev.json.JSONArray;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class GMapsService {
@@ -19,7 +19,6 @@ public class GMapsService {
 
     @Value("${interfaces.outcoming.gmaps.host:https://maps.googleapis.com}")
     private String gMapsHost;
-
 
     private static final String GMAPS_TEMPLATE = "/maps/api/directions/json?origin={origin}&destination={destination}&key={key}";
 

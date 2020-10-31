@@ -1,6 +1,5 @@
 package app.car.cap05.interfaces.incoming;
 
-
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import io.restassured.RestAssured;
@@ -12,6 +11,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
 import org.springframework.test.context.ActiveProfiles;
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static io.restassured.RestAssured.given;
@@ -23,7 +24,6 @@ import static app.car.cap05.infrastructure.FileUtils.loadFileContents;
 @AutoConfigureWireMock(port = WireMockConfiguration.DYNAMIC_PORT)
 @ActiveProfiles("test")
 public class TravelRequestAPITestIT {
-
 
     @LocalServerPort
     private int port;
@@ -40,7 +40,7 @@ public class TravelRequestAPITestIT {
     public void testFindNearbyTravelRequests() {
 
         setupServer();
-        given()
+        String passengerId =given()
                 .contentType(ContentType.JSON)
                 .body(loadFileContents("/requests/passengers_api/create_new_passenger.json"))
                 .post("/passengers")
@@ -48,11 +48,17 @@ public class TravelRequestAPITestIT {
                 .statusCode(200)
                 .body("id", notNullValue())
                 .body("name", is("Alexandre Saudate"))
+                .extract()
+                .body()
+                .jsonPath().getString("id")
         ;
 
-        given()
+        Map<String, String> data = new HashMap<>();
+        data.put("passengerId", passengerId);
+
+        Integer travelRequestId = given()
                 .contentType(ContentType.JSON)
-                .body(loadFileContents("/requests/travel_requests_api/create_new_request.json"))
+                .body(loadFileContents("/requests/travel_requests_api/create_new_request.json", data))
                 .post("/travelRequests")
                 .then()
                 .statusCode(200)
@@ -61,20 +67,21 @@ public class TravelRequestAPITestIT {
                 .body("destination", is("Avenida Ipiranga, 100"))
                 .body("status", is("CREATED"))
                 .body("_links.passenger.title", is("Alexandre Saudate"))
+                .extract()
+                .jsonPath()
+                .get("id")
                 ;
 
         given()
                 .get("/travelRequests/nearby?currentAddress=Avenida Paulista, 900")
                 .then()
                 .statusCode(200)
-                .body("[0].id", notNullValue())
+                .body("[0].id", is(travelRequestId))
                 .body("[0].origin", is("Avenida Paulista, 1000"))
                 .body("[0].destination", is("Avenida Ipiranga, 100"))
                 .body("[0].status", is("CREATED"))
                 ;
-
     }
-
 
     public void setupServer() {
 
@@ -85,9 +92,4 @@ public class TravelRequestAPITestIT {
             .willReturn(okJson(loadFileContents("/responses/gmaps/sample_response.json")))
         );
     }
-
-
-
-
-
 }
