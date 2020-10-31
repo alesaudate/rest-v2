@@ -18,6 +18,7 @@ import java.util.Map;
 
 import static app.car.cap09.infrastructure.FileUtils.loadFileContents;
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
+import static io.restassured.RestAssured.basic;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
@@ -38,8 +39,8 @@ public class TravelRequestAPITestIT {
     @BeforeEach
     public void setup() {
         RestAssured.baseURI = "https://localhost:" + port;
+        RestAssured.authentication = basic("admin", "password");
         RestAssured.useRelaxedHTTPSValidation();
-
     }
 
     @Test
@@ -48,7 +49,6 @@ public class TravelRequestAPITestIT {
         setupServer();
         String passengerId =
                 given()
-                        .auth().preemptive().basic("admin", "password")
                         .contentType(ContentType.JSON)
                         .body(loadFileContents("/requests/passengers_api/create_new_passenger.json"))
                         .post("/passengers")
@@ -66,7 +66,6 @@ public class TravelRequestAPITestIT {
 
         Integer travelRequestId =
                 given()
-                        .auth().preemptive().basic("admin", "password")
                         .contentType(ContentType.JSON)
                         .body(loadFileContents("/requests/travel_requests_api/create_new_request.json", data))
                         .post("/travelRequests")
@@ -83,7 +82,6 @@ public class TravelRequestAPITestIT {
                 ;
 
         given()
-                .auth().preemptive().basic("admin", "password")
                 .get("/travelRequests/nearby?currentAddress=Avenida Paulista, 900")
                 .then()
                 .statusCode(200)
