@@ -4,6 +4,7 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
 
+import app.car.cap05.infrastructure.FileUtils;
 import io.restassured.RestAssured;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,8 +26,7 @@ public class PassengerAPITestIT {
     public void testCreatePassenger() {
 
 
-        String createPassengerJSON = "{\"name\":\"Alexandre Saudate\"}";
-
+        String createPassengerJSON = FileUtils.loadFileContents("/requests/passengers_api/create_new_passenger.json");
 
         given()
                 .contentType(io.restassured.http.ContentType.JSON)

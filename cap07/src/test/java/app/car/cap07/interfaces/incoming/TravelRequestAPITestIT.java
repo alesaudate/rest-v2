@@ -17,7 +17,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static app.car.cap07.infrastructure.FileUtils.loadFileContents;
-import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static io.restassured.RestAssured.basic;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.is;
@@ -25,7 +24,7 @@ import static org.hamcrest.Matchers.notNullValue;
 
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@AutoConfigureWireMock(port = WireMockConfiguration.DYNAMIC_PORT)
+@AutoConfigureWireMock(port = WireMockConfiguration.DYNAMIC_PORT, stubs = "classpath:/stubs")
 @ActiveProfiles("test")
 public class TravelRequestAPITestIT {
 
@@ -46,7 +45,6 @@ public class TravelRequestAPITestIT {
     @Test
     public void testFindNearbyTravelRequests() {
 
-        setupServer();
         String passengerId =
                 given()
                         .contentType(ContentType.JSON)
@@ -91,17 +89,6 @@ public class TravelRequestAPITestIT {
                 .body("[0].status", is("CREATED"))
         ;
 
-    }
-
-
-    public void setupServer() {
-
-        server.stubFor(get(urlPathEqualTo("/maps/api/directions/json"))
-                .withQueryParam("origin", equalTo("Avenida Paulista, 900"))
-                .withQueryParam("destination", equalTo("Avenida Paulista, 1000"))
-                .withQueryParam("key", equalTo("chaveGoogle"))
-                .willReturn(okJson(loadFileContents("/responses/gmaps/sample_response.json")))
-        );
     }
 
 }

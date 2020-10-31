@@ -1,0 +1,24 @@
+{
+  "request": {
+    "urlPath": "/maps/api/directions/json",
+    "method": "GET",
+    "queryParameters" : {
+      "origin" : {
+        "equalTo" : "Avenida Paulista, 900"
+      },
+      "destination" : {
+        "equalTo" : "Avenida Paulista, 1000"
+      },
+      "key" : {
+        "equalTo" : "chaveGoogle"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "bodyFileName": "responses/gmaps/sample_response.json"
+  }
+}

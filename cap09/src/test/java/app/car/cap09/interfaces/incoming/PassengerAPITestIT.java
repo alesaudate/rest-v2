@@ -1,5 +1,6 @@
 package app.car.cap09.interfaces.incoming;
 
+import app.car.cap09.infrastructure.FileUtils;
 import io.restassured.RestAssured;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,7 +29,7 @@ public class PassengerAPITestIT {
     public void testCreatePassenger() {
 
 
-        String createPassengerJSON = "{\"name\":\"Alexandre Saudate\"}";
+        String createPassengerJSON = FileUtils.loadFileContents("/requests/passengers_api/create_new_passenger.json");
 
 
         given()

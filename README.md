@@ -1,0 +1,1 @@
+Esta versão substitui a declaração programática dos mocks do WireMock por _stubs_. Esta funcionalidade não foi incluída no livro porquê julguei demasiado complexo para ser explicado e detalhado no livro, além de fugir muito do propósito. 
