@@ -1,12 +1,11 @@
 package app.car.cap09.interfaces.incoming;
 
-import io.restassured.RestAssured;
+import app.car.cap09.infrastructure.TestConfigurer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 
-import static io.restassured.RestAssured.basic;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
@@ -19,9 +18,7 @@ public class PassengerAPITestIT {
 
     @BeforeEach
     public void setup() {
-        RestAssured.baseURI = "https://localhost:" + port;
-        RestAssured.useRelaxedHTTPSValidation();
-        RestAssured.authentication = basic("admin", "password");
+        TestConfigurer.setup(port);
     }
 
     @Test

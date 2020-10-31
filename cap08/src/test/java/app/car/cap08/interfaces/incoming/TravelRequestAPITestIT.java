@@ -1,6 +1,7 @@
 package app.car.cap08.interfaces.incoming;
 
 
+import app.car.cap08.infrastructure.TestConfigurer;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import io.restassured.RestAssured;
@@ -29,18 +30,15 @@ import static org.hamcrest.Matchers.notNullValue;
 @ActiveProfiles("test")
 public class TravelRequestAPITestIT {
 
+    @Autowired
+    private WireMockServer server;
 
     @LocalServerPort
     private int port;
 
-    @Autowired
-    private WireMockServer server;
-
     @BeforeEach
     public void setup() {
-        RestAssured.baseURI = "https://localhost:" + port;
-        RestAssured.authentication = basic("admin", "password");
-        RestAssured.useRelaxedHTTPSValidation();
+        TestConfigurer.setup(port);
     }
 
     @Test

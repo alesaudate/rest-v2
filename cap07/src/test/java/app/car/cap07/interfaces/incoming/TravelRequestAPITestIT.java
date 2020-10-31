@@ -1,9 +1,9 @@
 package app.car.cap07.interfaces.incoming;
 
 
+import app.car.cap07.infrastructure.TestConfigurer;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
-import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,7 +18,6 @@ import java.util.Map;
 
 import static app.car.cap07.infrastructure.FileUtils.loadFileContents;
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
-import static io.restassured.RestAssured.basic;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
@@ -29,18 +28,15 @@ import static org.hamcrest.Matchers.notNullValue;
 @ActiveProfiles("test")
 public class TravelRequestAPITestIT {
 
+    @Autowired
+    private WireMockServer server;
 
     @LocalServerPort
     private int port;
 
-    @Autowired
-    private WireMockServer server;
-
     @BeforeEach
     public void setup() {
-        RestAssured.baseURI = "https://localhost:" + port;
-        RestAssured.authentication = basic("admin", "password");
-        RestAssured.useRelaxedHTTPSValidation();
+        TestConfigurer.setup(port);
     }
 
     @Test
