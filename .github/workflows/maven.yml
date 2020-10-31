@@ -21,4 +21,4 @@ jobs:
       with:
         java-version: 1.8
     - name: Build with Maven
-      run: mvn -B package --file cap01/pom.xml ; mvn -B package --file cap02/pom.xml; mvn -B package --file cap03/pom.xml; mvn -B package --file cap04/pom.xml; mvn -B package --file cap05/pom.xml; mvn -B package --file cap06/pom.xml; mvn -B package --file cap07/pom.xml; mvn -B package --file cap08/pom.xml; mvn -B package --file cap09/pom.xml
+      run: mvn -B verify --file cap01/pom.xml ; mvn -B verify --file cap02/pom.xml; mvn -B verify --file cap03/pom.xml; mvn -B verify --file cap04/pom.xml; mvn -B verify --file cap05/pom.xml; mvn -B verify --file cap06/pom.xml; mvn -B verify --file cap07/pom.xml; mvn -B verify --file cap08/pom.xml; mvn -B verify --file cap09/pom.xml
