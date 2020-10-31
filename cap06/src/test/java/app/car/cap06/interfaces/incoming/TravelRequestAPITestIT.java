@@ -35,11 +35,9 @@ public class TravelRequestAPITestIT {
     @Autowired
     private WireMockServer server;
 
-    private String url;
-
     @BeforeEach
     public void setup() {
-        url = "https://localhost:" + port;
+        RestAssured.baseURI = "https://localhost:" + port;
         RestAssured.useRelaxedHTTPSValidation();
 
     }
@@ -53,7 +51,7 @@ public class TravelRequestAPITestIT {
                 .auth().preemptive().basic("admin", "password")
                 .contentType(ContentType.JSON)
                 .body(loadFileContents("/requests/passengers_api/create_new_passenger.json"))
-                .post(url + "/passengers")
+                .post("/passengers")
                 .then()
                 .statusCode(200)
                 .body("id", notNullValue())
@@ -71,7 +69,7 @@ public class TravelRequestAPITestIT {
                 .auth().preemptive().basic("admin", "password")
                 .contentType(ContentType.JSON)
                 .body(loadFileContents("/requests/travel_requests_api/create_new_request.json", data))
-                .post(url + "/travelRequests")
+                .post("/travelRequests")
                 .then()
                 .statusCode(200)
                 .body("id", notNullValue())
@@ -86,7 +84,7 @@ public class TravelRequestAPITestIT {
 
         given()
                 .auth().preemptive().basic("admin", "password")
-                .get(url + "/travelRequests/nearby?currentAddress=Avenida Paulista, 900")
+                .get("/travelRequests/nearby?currentAddress=Avenida Paulista, 900")
                 .then()
                 .statusCode(200)
                 .body("[0].id", is(travelRequestId))

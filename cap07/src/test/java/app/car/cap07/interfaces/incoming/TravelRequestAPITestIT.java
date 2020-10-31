@@ -22,6 +22,7 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
+
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureWireMock(port = WireMockConfiguration.DYNAMIC_PORT)
 @ActiveProfiles("test")
@@ -34,12 +35,11 @@ public class TravelRequestAPITestIT {
     @Autowired
     private WireMockServer server;
 
-    private String url;
-
     @BeforeEach
     public void setup() {
-        url = "https://localhost:" + port;
+        RestAssured.baseURI = "https://localhost:" + port;
         RestAssured.useRelaxedHTTPSValidation();
+
     }
 
     @Test
@@ -48,50 +48,50 @@ public class TravelRequestAPITestIT {
         setupServer();
         String passengerId =
                 given()
-                .auth().preemptive().basic("admin", "password")
-                .contentType(ContentType.JSON)
-                .body(loadFileContents("/requests/passengers_api/create_new_passenger.json"))
-                .post(url + "/passengers")
-                .then()
-                .statusCode(200)
-                .body("id", notNullValue())
-                .body("name", is("Alexandre Saudate"))
-                .extract()
-                .body()
-                .jsonPath().getString("id")
-        ;
+                        .auth().preemptive().basic("admin", "password")
+                        .contentType(ContentType.JSON)
+                        .body(loadFileContents("/requests/passengers_api/create_new_passenger.json"))
+                        .post("/passengers")
+                        .then()
+                        .statusCode(200)
+                        .body("id", notNullValue())
+                        .body("name", is("Alexandre Saudate"))
+                        .extract()
+                        .body()
+                        .jsonPath().getString("id")
+                ;
 
         Map<String, String> data = new HashMap<>();
         data.put("passengerId", passengerId);
 
         Integer travelRequestId =
                 given()
-                .auth().preemptive().basic("admin", "password")
-                .contentType(ContentType.JSON)
-                .body(loadFileContents("/requests/travel_requests_api/create_new_request.json", data))
-                .post(url + "/travelRequests")
-                .then()
-                .statusCode(200)
-                .body("id", notNullValue())
-                .body("origin", is("Avenida Paulista, 1000"))
-                .body("destination", is("Avenida Ipiranga, 100"))
-                .body("status", is("CREATED"))
-                .body("_links.passenger.title", is("Alexandre Saudate"))
-                .extract()
-                .jsonPath()
-                .get("id")
+                        .auth().preemptive().basic("admin", "password")
+                        .contentType(ContentType.JSON)
+                        .body(loadFileContents("/requests/travel_requests_api/create_new_request.json", data))
+                        .post("/travelRequests")
+                        .then()
+                        .statusCode(200)
+                        .body("id", notNullValue())
+                        .body("origin", is("Avenida Paulista, 1000"))
+                        .body("destination", is("Avenida Ipiranga, 100"))
+                        .body("status", is("CREATED"))
+                        .body("_links.passenger.title", is("Alexandre Saudate"))
+                        .extract()
+                        .jsonPath()
+                        .get("id")
                 ;
 
         given()
                 .auth().preemptive().basic("admin", "password")
-                .get(url + "/travelRequests/nearby?currentAddress=Avenida Paulista, 900")
+                .get("/travelRequests/nearby?currentAddress=Avenida Paulista, 900")
                 .then()
                 .statusCode(200)
                 .body("[0].id", is(travelRequestId))
                 .body("[0].origin", is("Avenida Paulista, 1000"))
                 .body("[0].destination", is("Avenida Ipiranga, 100"))
                 .body("[0].status", is("CREATED"))
-                ;
+        ;
 
     }
 
@@ -99,12 +99,11 @@ public class TravelRequestAPITestIT {
     public void setupServer() {
 
         server.stubFor(get(urlPathEqualTo("/maps/api/directions/json"))
-            .withQueryParam("origin", equalTo("Avenida Paulista, 900"))
-            .withQueryParam("destination", equalTo("Avenida Paulista, 1000"))
-            .withQueryParam("key", equalTo("chaveGoogle"))
-            .willReturn(okJson(loadFileContents("/responses/gmaps/sample_response.json")))
+                .withQueryParam("origin", equalTo("Avenida Paulista, 900"))
+                .withQueryParam("destination", equalTo("Avenida Paulista, 1000"))
+                .withQueryParam("key", equalTo("chaveGoogle"))
+                .willReturn(okJson(loadFileContents("/responses/gmaps/sample_response.json")))
         );
     }
-
 
 }

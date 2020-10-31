@@ -1,14 +1,14 @@
 package app.car.cap07.interfaces.incoming;
 
-import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.notNullValue;
-
 import io.restassured.RestAssured;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
+
+import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.notNullValue;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class PassengerAPITestIT {
@@ -16,11 +16,9 @@ public class PassengerAPITestIT {
     @LocalServerPort
     private int port;
 
-    private String url;
-
     @BeforeEach
     public void setup() {
-        url = "https://localhost:" + port;
+        RestAssured.baseURI = "https://localhost:" + port;
         RestAssured.useRelaxedHTTPSValidation();
     }
 
@@ -35,7 +33,7 @@ public class PassengerAPITestIT {
                 .auth().preemptive().basic("admin", "password")
                 .contentType(io.restassured.http.ContentType.JSON)
                 .body(createPassengerJSON)
-                .post(url + "/passengers")
+                .post("/passengers")
                 .then()
                 .statusCode(200)
                 .body("id", notNullValue())
