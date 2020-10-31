@@ -1,25 +1,32 @@
 package app.car.cap07.interfaces.incoming;
 
 
+import com.github.tomakehurst.wiremock.WireMockServer;
+import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
+import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
+import org.springframework.test.context.ActiveProfiles;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import static app.car.cap07.infrastructure.FileUtils.loadFileContents;
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
-import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
+import static io.restassured.RestAssured.basic;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
-import app.car.cap07.interfaces.outcoming.GMapsService;
-import com.github.tomakehurst.wiremock.WireMockServer;
-import io.restassured.RestAssured;
-import io.restassured.http.ContentType;
-import java.io.InputStream;
-import lombok.SneakyThrows;
-import org.junit.jupiter.api.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.core.io.ClassPathResource;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@AutoConfigureWireMock(port = WireMockConfiguration.DYNAMIC_PORT)
+@ActiveProfiles("test")
 public class TravelRequestAPITestIT {
 
 
@@ -27,64 +34,62 @@ public class TravelRequestAPITestIT {
     private int port;
 
     @Autowired
-    private GMapsService service;
-
-    private static WireMockServer server;
-
-    @BeforeAll
-    public static void startWireMock() {
-        server = new WireMockServer(wireMockConfig().dynamicPort());
-        server.start();
-    }
-
-    @AfterAll
-    public static void stopWiremock() {
-        server.stop();
-    }
+    private WireMockServer server;
 
     @BeforeEach
     public void setup() {
-        RestAssured.port = port;
-        service.setGMapsHost("http://localhost:" + server.port());
-
+        RestAssured.baseURI = "https://localhost:" + port;
+        RestAssured.authentication = basic("admin", "password");
+        RestAssured.useRelaxedHTTPSValidation();
     }
 
     @Test
     public void testFindNearbyTravelRequests() {
 
         setupServer();
-        given()
-                .contentType(ContentType.JSON)
-                .body(loadInput("/requests/passengers_api/create_new_passenger.json"))
-                .post("/passengers")
-                .then()
-                .statusCode(200)
-                .body("id", notNullValue())
-                .body("name", is("Alexandre Saudate"))
-        ;
+        String passengerId =
+                given()
+                        .contentType(ContentType.JSON)
+                        .body(loadFileContents("/requests/passengers_api/create_new_passenger.json"))
+                        .post("/passengers")
+                        .then()
+                        .statusCode(200)
+                        .body("id", notNullValue())
+                        .body("name", is("Alexandre Saudate"))
+                        .extract()
+                        .body()
+                        .jsonPath().getString("id")
+                ;
 
-        given()
-                .contentType(ContentType.JSON)
-                .body(loadInput("/requests/travel_requests_api/create_new_request.json"))
-                .post("/travelRequests")
-                .then()
-                .statusCode(200)
-                .body("id", notNullValue())
-                .body("origin", is("Avenida Paulista, 1000"))
-                .body("destination", is("Avenida Ipiranga, 100"))
-                .body("status", is("CREATED"))
-                .body("_links.passenger.title", is("Alexandre Saudate"))
+        Map<String, String> data = new HashMap<>();
+        data.put("passengerId", passengerId);
+
+        Integer travelRequestId =
+                given()
+                        .contentType(ContentType.JSON)
+                        .body(loadFileContents("/requests/travel_requests_api/create_new_request.json", data))
+                        .post("/travelRequests")
+                        .then()
+                        .statusCode(200)
+                        .body("id", notNullValue())
+                        .body("origin", is("Avenida Paulista, 1000"))
+                        .body("destination", is("Avenida Ipiranga, 100"))
+                        .body("status", is("CREATED"))
+                        .body("_links.passenger.title", is("Alexandre Saudate"))
+                        .extract()
+                        .jsonPath()
+                        .get("id")
                 ;
 
         given()
                 .get("/travelRequests/nearby?currentAddress=Avenida Paulista, 900")
                 .then()
                 .statusCode(200)
-                .body("[0].id", notNullValue())
+                .body("[0].id", is(travelRequestId))
                 .body("[0].origin", is("Avenida Paulista, 1000"))
                 .body("[0].destination", is("Avenida Ipiranga, 100"))
                 .body("[0].status", is("CREATED"))
-                ;
+        ;
 
     }
 
@@ -92,22 +97,11 @@ public class TravelRequestAPITestIT {
     public void setupServer() {
 
         server.stubFor(get(urlPathEqualTo("/maps/api/directions/json"))
-            .withQueryParam("origin", equalTo("Avenida Paulista, 900"))
-            .withQueryParam("destination", equalTo("Avenida Paulista, 1000"))
-            .withQueryParam("key", equalTo("chaveGoogle"))
-            .willReturn(okJson(loadInput("/responses/gmaps/sample_response.json")))
+                .withQueryParam("origin", equalTo("Avenida Paulista, 900"))
+                .withQueryParam("destination", equalTo("Avenida Paulista, 1000"))
+                .withQueryParam("key", equalTo("chaveGoogle"))
+                .willReturn(okJson(loadFileContents("/responses/gmaps/sample_response.json")))
         );
     }
-
-
-    @SneakyThrows
-    String loadInput(String fileName) {
-
-        InputStream is = new ClassPathResource(fileName).getInputStream();
-        byte[] data = new byte[is.available()];
-        is.read(data);
-        return new String(data);
-    }
-
 
 }

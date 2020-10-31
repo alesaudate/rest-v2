@@ -17,8 +17,8 @@ public class GMapsService {
     @Value("${app.car.domain.googlemaps.apikey}")
     private String appKey;
 
-    private String gMapsHost = "https://maps.googleapis.com";
-
+    @Value("${interfaces.outcoming.gmaps.host:https://maps.googleapis.com}")
+    private String gMapsHost;
 
     private static final String GMAPS_TEMPLATE = "/maps/api/directions/json?origin={origin}&destination={destination}&key={key}";
 
@@ -32,9 +32,5 @@ public class GMapsService {
         List<Integer> results = rawResults.stream().map(it -> ((Integer) it)).collect(Collectors.toList());
 
         return results.stream().min(Integer::compareTo).orElse(Integer.MAX_VALUE);
-    }
-
-    public void setGMapsHost(String gMapsHost) {
-        this.gMapsHost = gMapsHost;
     }
 }
