@@ -1,2 +1,0 @@
-class Cap09Application {
-}
