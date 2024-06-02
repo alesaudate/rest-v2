@@ -1,59 +1,52 @@
 package app.car.cap07.config;
 
-import javax.sql.DataSource;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.provisioning.JdbcUserDetailsManager;
+import org.springframework.security.web.DefaultSecurityFilterChain;
+
+import javax.sql.DataSource;
+
+import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(jsr250Enabled = true)
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
-
+@EnableMethodSecurity(jsr250Enabled = true)
+public class SecurityConfig {
 
 
     @Autowired
     DataSource dataSource;
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable();
-
-        http.sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-
-        http.
-                authorizeRequests()
-                .anyRequest()
-                .authenticated()
-                .and()
-                .httpBasic();
-
+    @Bean
+    public DefaultSecurityFilterChain securityFilterChain(HttpSecurity http, UserDetailsService userDetailsService) throws Exception {
+        http.csrf(CsrfConfigurer::disable);
+        http.sessionManagement(configure -> configure.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+        http.authorizeHttpRequests(configure -> configure.anyRequest().authenticated());
+        http.httpBasic(withDefaults());
+        http.userDetailsService(userDetailsService);
+        return http.build();
     }
 
 
-
-    @Override
-    public void configure(AuthenticationManagerBuilder auth)
-            throws Exception {
-
-        String queryUsers = "select username, password, enabled from user where username=?";
-        String queryRoles = "select u.username, r.roles from user_roles r, user u where r.user_id = u.id and u.username=?";
-
-        auth.jdbcAuthentication()
-                .dataSource(dataSource)
-                .passwordEncoder(passwordEncoder())
-                .usersByUsernameQuery(queryUsers)
-                .authoritiesByUsernameQuery(queryRoles);
+    @Bean
+    public JdbcUserDetailsManager jdbcUserDetailsManager() {
+        var jdbcUserDetailsManager = new JdbcUserDetailsManager(dataSource);
+        jdbcUserDetailsManager.setUsersByUsernameQuery("select username, password, enabled from users where username=?");
+        jdbcUserDetailsManager.setAuthoritiesByUsernameQuery("select u.username, r.roles from user_roles r, users u where r.user_id = u.id and u.username=?");
+        return jdbcUserDetailsManager;
     }
+
 
     @Bean
     public PasswordEncoder passwordEncoder() {

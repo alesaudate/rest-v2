@@ -8,22 +8,26 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
 import org.springframework.test.context.ActiveProfiles;
+
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.github.tomakehurst.wiremock.client.WireMock.*;
+import static app.car.cap05.infrastructure.FileUtils.loadFileContents;
+import static com.github.tomakehurst.wiremock.client.WireMock.equalTo;
+import static com.github.tomakehurst.wiremock.client.WireMock.get;
+import static com.github.tomakehurst.wiremock.client.WireMock.okJson;
+import static com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
-import static app.car.cap05.infrastructure.FileUtils.loadFileContents;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureWireMock(port = WireMockConfiguration.DYNAMIC_PORT)
 @ActiveProfiles("test")
-public class TravelRequestAPITestIT {
+class TravelRequestAPITestIT {
 
     @LocalServerPort
     private int port;
@@ -37,7 +41,7 @@ public class TravelRequestAPITestIT {
     }
 
     @Test
-    public void testFindNearbyTravelRequests() {
+    void testFindNearbyTravelRequests() {
 
         setupServer();
         String passengerId =given()

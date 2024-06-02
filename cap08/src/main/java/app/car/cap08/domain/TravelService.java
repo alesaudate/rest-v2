@@ -32,6 +32,6 @@ public class TravelService {
         return requests
                 .stream()
                 .filter(tr -> gMapsService.getDistanceBetweenAddresses(currentAddress, tr.getOrigin()) < MAX_TRAVEL_TIME)
-                .collect(Collectors.toList());
+                .toList();
     }
 }

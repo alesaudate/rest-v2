@@ -49,7 +49,7 @@ public class TravelRequestMapper {
     }
 
     public EntityModel<TravelRequestOutput> buildOutputModel(TravelRequest travelRequest, TravelRequestOutput output) {
-        EntityModel<TravelRequestOutput> model = new EntityModel<>(output);
+        EntityModel<TravelRequestOutput> model = EntityModel.of(output);
 
         Link passengerLink = WebMvcLinkBuilder
                 .linkTo(PassengerAPI.class)
@@ -61,7 +61,7 @@ public class TravelRequestMapper {
     }
 
     public List<EntityModel<TravelRequestOutput>> buildOutputModel(List<TravelRequest> requests) {
-        return requests.stream().map(tr -> buildOutputModel(tr, map(tr))).collect(Collectors.toList());
+        return requests.stream().map(tr -> buildOutputModel(tr, map(tr))).toList();
     }
 
 }

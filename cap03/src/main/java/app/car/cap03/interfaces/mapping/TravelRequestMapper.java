@@ -1,7 +1,5 @@
 package app.car.cap03.interfaces.mapping;
 
-//imports omitidos
-
 import app.car.cap03.domain.Passenger;
 import app.car.cap03.domain.PassengerRepository;
 import app.car.cap03.domain.TravelRequest;
@@ -48,7 +46,7 @@ public class TravelRequestMapper {
     }
 
     public EntityModel<TravelRequestOutput> buildOutputModel(TravelRequest travelRequest, TravelRequestOutput output) {
-        EntityModel<TravelRequestOutput> model = new EntityModel<>(output);
+        EntityModel<TravelRequestOutput> model = EntityModel.of(output);
 
         Link passengerLink = WebMvcLinkBuilder
                 .linkTo(PassengerAPI.class)
