@@ -40,7 +40,7 @@ class TravelRequestAPITestIT {
     private WireMockServer server;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         RestAssured.baseURI = "https://localhost:" + port;
         RestAssured.authentication = basic("admin", "password");
         RestAssured.useRelaxedHTTPSValidation();
@@ -95,7 +95,7 @@ class TravelRequestAPITestIT {
     }
 
 
-    public void setupServer() {
+    void setupServer() {
 
         server.stubFor(get(urlPathEqualTo("/maps/api/directions/json"))
                 .withQueryParam("origin", equalTo("Avenida Paulista, 900"))

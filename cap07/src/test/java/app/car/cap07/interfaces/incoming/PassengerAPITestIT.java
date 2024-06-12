@@ -19,7 +19,7 @@ class PassengerAPITestIT {
     private int port;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         RestAssured.baseURI = "https://localhost:" + port;
         RestAssured.useRelaxedHTTPSValidation();
         RestAssured.authentication = basic("admin", "password");

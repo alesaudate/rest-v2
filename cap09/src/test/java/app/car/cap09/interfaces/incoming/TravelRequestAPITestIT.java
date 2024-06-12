@@ -94,7 +94,7 @@ class TravelRequestAPITestIT {
     }
 
 
-    public void setupServer() {
+    void setupServer() {
 
         server.stubFor(get(urlPathEqualTo("/maps/api/directions/json"))
                 .withQueryParam("origin", equalTo("Avenida Paulista, 900"))
