@@ -1,7 +1,6 @@
 package app.car.cap05.interfaces.incoming;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
-import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,16 +15,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static app.car.cap05.infrastructure.FileUtils.loadFileContents;
-import static com.github.tomakehurst.wiremock.client.WireMock.equalTo;
-import static com.github.tomakehurst.wiremock.client.WireMock.get;
-import static com.github.tomakehurst.wiremock.client.WireMock.okJson;
-import static com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo;
+import static com.github.tomakehurst.wiremock.client.WireMock.*;
+import static com.github.tomakehurst.wiremock.core.Options.DYNAMIC_PORT;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@AutoConfigureWireMock(port = WireMockConfiguration.DYNAMIC_PORT)
+@SpringBootTest(webEnvironment = RANDOM_PORT)
+@AutoConfigureWireMock(port = DYNAMIC_PORT)
 @ActiveProfiles("test")
 class TravelRequestAPITestIT {
 
