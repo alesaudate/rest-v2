@@ -2,11 +2,11 @@ package app.car.cap04.domain;
 
 
 import app.car.cap04.interfaces.outcoming.GMapsService;
-import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Date;
+import java.util.List;
 
 @Service
 public class TravelService {
