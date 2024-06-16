@@ -5,7 +5,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver;
 
 import jakarta.servlet.http.HttpServletRequest;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
@@ -27,6 +26,4 @@ public class LocaleResolver extends AcceptHeaderLocaleResolver {
         Locale locale = Locale.lookup(list, ACCEPTED_LOCALES);
         return Optional.ofNullable(locale).orElse(DEFAULT_LOCALE);
     }
-
-
 }
