@@ -34,7 +34,7 @@ public class SecurityConfig {
 
 
     @Bean
-    public DefaultSecurityFilterChain securityFilterChain(HttpSecurity http, UserDetailsService userDetailsService) throws Exception {
+    public DefaultSecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(CsrfConfigurer::disable);
         http.cors(configure -> configure.configurationSource(corsConfigurationSource()));
         http.sessionManagement(configure -> configure.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
@@ -44,13 +44,12 @@ public class SecurityConfig {
                         .permitAll());
         http.authorizeHttpRequests(configure -> configure.anyRequest().authenticated());
         http.httpBasic(withDefaults());
-        http.userDetailsService(userDetailsService);
         return http.build();
     }
 
 
     @Bean
-    public JdbcUserDetailsManager jdbcUserDetailsManager() {
+    public UserDetailsService userDetailsService() {
         var jdbcUserDetailsManager = new JdbcUserDetailsManager(dataSource);
         jdbcUserDetailsManager.setUsersByUsernameQuery("select username, password, enabled from users where username=?");
         jdbcUserDetailsManager.setAuthoritiesByUsernameQuery("select u.username, r.roles from user_roles r, users u where r.user_id = u.id and u.username=?");

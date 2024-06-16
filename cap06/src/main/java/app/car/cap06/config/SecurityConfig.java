@@ -1,6 +1,5 @@
 package app.car.cap06.config;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,9 +8,11 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.DefaultSecurityFilterChain;
 
@@ -29,20 +30,19 @@ public class SecurityConfig {
     DataSource dataSource;
 
     @Bean
-    public DefaultSecurityFilterChain securityFilterChain(HttpSecurity http, UserDetailsService userDetailsService) throws Exception {
+    public DefaultSecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(CsrfConfigurer::disable);
         http.sessionManagement(configure -> configure.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         http.authorizeHttpRequests(configure -> configure.anyRequest().authenticated());
         http.httpBasic(withDefaults());
-        http.userDetailsService(userDetailsService);
+        http.headers(c1 -> c1.frameOptions(c2 -> c2.disable()));
         return http.build();
     }
 
-
-
-    /*public InMemoryUserDetailsManager inMemoryUserDetailsManager(PasswordEncoder passwordEncoder) {
+    @Bean
+    public UserDetailsService userDetailsService() {
+        /*var password = "password";
         var inMemoryUserDetailsManager = new InMemoryUserDetailsManager();
-        var password = passwordEncoder.encode("password");
 
         var driver = User.builder()
                 .username("driver")
@@ -63,14 +63,14 @@ public class SecurityConfig {
         inMemoryUserDetailsManager.createUser(passenger.build());
         inMemoryUserDetailsManager.createUser(admin.build());
 
-        return inMemoryUserDetailsManager;
-    }*/
+        return inMemoryUserDetailsManager;*/
 
-    @Bean
-    public JdbcUserDetailsManager jdbcUserDetailsManager() {
+        var queryUsers = "select username, password, enabled from users where username=?";
+        var queryRoles = "select u.username, r.roles from user_roles r, users u where r.user_id = u.id and u.username=?";
+
         var jdbcUserDetailsManager = new JdbcUserDetailsManager(dataSource);
-        jdbcUserDetailsManager.setUsersByUsernameQuery("select username, password, enabled from users where username=?");
-        jdbcUserDetailsManager.setAuthoritiesByUsernameQuery("select u.username, r.roles from user_roles r, users u where r.user_id = u.id and u.username=?");
+        jdbcUserDetailsManager.setUsersByUsernameQuery(queryUsers);
+        jdbcUserDetailsManager.setAuthoritiesByUsernameQuery(queryRoles);
         return jdbcUserDetailsManager;
     }
 
