@@ -1,6 +1,7 @@
 package app.car.cap07.domain;
 
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -25,5 +26,5 @@ public class TravelRequest {
 
     @Enumerated(EnumType.STRING)
     TravelRequestStatus status;
-    Date creationDate;
+    LocalDateTime creationDate;
 }

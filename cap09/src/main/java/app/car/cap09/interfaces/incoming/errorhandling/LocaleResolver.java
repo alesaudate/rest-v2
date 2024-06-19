@@ -1,10 +1,12 @@
 package app.car.cap09.interfaces.incoming.errorhandling;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver;
 
 import jakarta.servlet.http.HttpServletRequest;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;

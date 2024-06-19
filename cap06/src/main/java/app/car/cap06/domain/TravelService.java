@@ -2,6 +2,8 @@ package app.car.cap06.domain;
 
 
 import app.car.cap06.interfaces.outcoming.GMapsService;
+
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,7 +24,7 @@ public class TravelService {
 
     public TravelRequest saveTravelRequest(TravelRequest travelRequest) {
         travelRequest.setStatus(TravelRequestStatus.CREATED);
-        travelRequest.setCreationDate(new Date());
+        travelRequest.setCreationDate(LocalDateTime.now());
         return travelRequestRepository.save(travelRequest);
     }
 

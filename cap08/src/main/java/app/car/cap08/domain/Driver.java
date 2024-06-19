@@ -1,5 +1,6 @@
 package app.car.cap08.domain;
 
+import java.time.LocalDate;
 import java.util.Date;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -25,6 +26,6 @@ public class Driver {
     String name;
 
     @Schema(description = "Data de nascimento do motorista")
-    Date birthDate;
+    LocalDate birthDate;
 
 }
