@@ -1,8 +1,6 @@
 package app.car.cap09.domain;
 
 
-import java.time.LocalDateTime;
-import java.util.Date;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -10,6 +8,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import lombok.Data;
+
+import java.time.LocalDateTime;
 
 @Data
 @Entity

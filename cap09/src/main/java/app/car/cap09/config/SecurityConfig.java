@@ -57,6 +57,7 @@ public class SecurityConfig {
     }
 
 
+    @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(List.of("https://bestcars.com"));

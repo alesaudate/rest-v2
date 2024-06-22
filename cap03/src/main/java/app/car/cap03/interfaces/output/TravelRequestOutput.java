@@ -1,10 +1,9 @@
 package app.car.cap03.interfaces.output;
 
 import app.car.cap03.domain.TravelRequestStatus;
+import lombok.Data;
 
 import java.time.LocalDateTime;
-import java.util.Date;
-import lombok.Data;
 
 @Data
 public class TravelRequestOutput {
