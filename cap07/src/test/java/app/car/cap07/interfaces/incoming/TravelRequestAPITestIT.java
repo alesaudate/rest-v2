@@ -9,7 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
 import org.springframework.test.context.ActiveProfiles;
 
@@ -17,7 +17,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static app.car.cap07.infrastructure.FileUtils.loadFileContents;
-import static com.github.tomakehurst.wiremock.client.WireMock.*;
+import static com.github.tomakehurst.wiremock.client.WireMock.equalTo;
+import static com.github.tomakehurst.wiremock.client.WireMock.get;
+import static com.github.tomakehurst.wiremock.client.WireMock.okJson;
+import static com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo;
 import static io.restassured.RestAssured.basic;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.is;
@@ -27,7 +30,7 @@ import static org.hamcrest.Matchers.notNullValue;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureWireMock(port = WireMockConfiguration.DYNAMIC_PORT)
 @ActiveProfiles("test")
-public class TravelRequestAPITestIT {
+class TravelRequestAPITestIT {
 
 
     @LocalServerPort
@@ -37,14 +40,14 @@ public class TravelRequestAPITestIT {
     private WireMockServer server;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         RestAssured.baseURI = "https://localhost:" + port;
         RestAssured.authentication = basic("admin", "password");
         RestAssured.useRelaxedHTTPSValidation();
     }
 
     @Test
-    public void testFindNearbyTravelRequests() {
+    void testFindNearbyTravelRequests() {
 
         setupServer();
         String passengerId =
@@ -58,8 +61,7 @@ public class TravelRequestAPITestIT {
                         .body("name", is("Alexandre Saudate"))
                         .extract()
                         .body()
-                        .jsonPath().getString("id")
-                ;
+                        .jsonPath().getString("id");
 
         Map<String, String> data = new HashMap<>();
         data.put("passengerId", passengerId);
@@ -78,8 +80,7 @@ public class TravelRequestAPITestIT {
                         .body("_links.passenger.title", is("Alexandre Saudate"))
                         .extract()
                         .jsonPath()
-                        .get("id")
-                ;
+                        .get("id");
 
         given()
                 .get("/travelRequests/nearby?currentAddress=Avenida Paulista, 900")
@@ -94,7 +95,7 @@ public class TravelRequestAPITestIT {
     }
 
 
-    public void setupServer() {
+    void setupServer() {
 
         server.stubFor(get(urlPathEqualTo("/maps/api/directions/json"))
                 .withQueryParam("origin", equalTo("Avenida Paulista, 900"))

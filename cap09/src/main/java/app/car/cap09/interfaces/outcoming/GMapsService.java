@@ -2,13 +2,11 @@ package app.car.cap09.interfaces.outcoming;
 
 
 import com.jayway.jsonpath.JsonPath;
-import java.util.List;
-import java.util.stream.Collectors;
-import lombok.Setter;
-import net.minidev.json.JSONArray;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.List;
 
 @Service
 public class GMapsService {
@@ -27,10 +25,7 @@ public class GMapsService {
         RestTemplate template = new RestTemplate();
         String jsonResult = template.getForObject(gMapsHost + GMAPS_TEMPLATE, String.class, addressOne, addressTwo, appKey);
 
-        JSONArray rawResults = JsonPath.parse(jsonResult).read("$..legs[*].duration.value");
-
-        List<Integer> results = rawResults.stream().map(it -> ((Integer) it)).collect(Collectors.toList());
-
+        List<Integer> results = JsonPath.parse(jsonResult).read("$..legs[*].duration.value");
         return results.stream().min(Integer::compareTo).orElse(Integer.MAX_VALUE);
     }
 

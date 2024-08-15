@@ -1,10 +1,11 @@
 package app.car.cap02.domain;
 
-import java.util.Date;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
 import lombok.Data;
+
+import java.time.LocalDate;
 
 @Data
 @Entity
@@ -15,6 +16,6 @@ public class Driver {
     @GeneratedValue
     Long id;
     String name;
-    Date birthDate;
+    LocalDate birthDate;
 
 }

@@ -35,12 +35,10 @@ public class DriverAPIImpl implements DriverAPI {
     public Drivers listDrivers(@RequestParam(name = "page", defaultValue = "0") int page) {
         Page<Driver> driverPage = driverRepository.findAll(PageRequest.of(page, PAGE_SIZE));
 
-        List<EntityModel<Driver>> driverList = new ArrayList<>();
-        for (Driver driver : driverPage.getContent()) {
-            driverList.add(new EntityModel<>(driver));
-        }
+        List<EntityModel<Driver>> driverList = driverPage.stream().map(EntityModel::of).toList();
 
-        Link lastPageLink = linkTo(methodOn(DriverAPIImpl.class).listDrivers(driverPage.getTotalPages() - 1))
+        Link lastPageLink = linkTo(methodOn(DriverAPIImpl.class)
+                .listDrivers(driverPage.getTotalPages() - 1))
                 .withRel("lastPage");
 
         return new Drivers(driverList, lastPageLink);

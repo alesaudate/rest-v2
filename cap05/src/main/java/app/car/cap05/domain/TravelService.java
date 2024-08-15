@@ -2,11 +2,11 @@ package app.car.cap05.domain;
 
 
 import app.car.cap05.interfaces.outcoming.GMapsService;
-import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class TravelService {
@@ -22,7 +22,7 @@ public class TravelService {
 
     public TravelRequest saveTravelRequest(TravelRequest travelRequest) {
         travelRequest.setStatus(TravelRequestStatus.CREATED);
-        travelRequest.setCreationDate(new Date());
+        travelRequest.setCreationDate(LocalDateTime.now());
         return travelRequestRepository.save(travelRequest);
     }
 
@@ -32,6 +32,6 @@ public class TravelService {
         return requests
                 .stream()
                 .filter(tr -> gMapsService.getDistanceBetweenAddresses(currentAddress, tr.getOrigin()) < MAX_TRAVEL_TIME)
-                .collect(Collectors.toList());
+                .toList();
     }
 }

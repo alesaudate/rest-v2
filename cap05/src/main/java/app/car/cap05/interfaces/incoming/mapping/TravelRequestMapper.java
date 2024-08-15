@@ -6,8 +6,6 @@ import app.car.cap05.domain.TravelRequest;
 import app.car.cap05.interfaces.incoming.PassengerAPI;
 import app.car.cap05.interfaces.incoming.input.TravelRequestInput;
 import app.car.cap05.interfaces.incoming.output.TravelRequestOutput;
-import java.util.List;
-import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
@@ -15,6 +13,8 @@ import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.util.List;
 
 @Component
 public class TravelRequestMapper {
@@ -49,7 +49,7 @@ public class TravelRequestMapper {
     }
 
     public EntityModel<TravelRequestOutput> buildOutputModel(TravelRequest travelRequest, TravelRequestOutput output) {
-        EntityModel<TravelRequestOutput> model = new EntityModel<>(output);
+        EntityModel<TravelRequestOutput> model = EntityModel.of(output);
 
         Link passengerLink = WebMvcLinkBuilder
                 .linkTo(PassengerAPI.class)
@@ -61,7 +61,7 @@ public class TravelRequestMapper {
     }
 
     public List<EntityModel<TravelRequestOutput>> buildOutputModel(List<TravelRequest> requests) {
-        return requests.stream().map(tr -> buildOutputModel(tr, map(tr))).collect(Collectors.toList());
+        return requests.stream().map(tr -> buildOutputModel(tr, map(tr))).toList();
     }
 
 }

@@ -39,7 +39,7 @@ public class DefaultErrorHandler {
                 .getFieldErrors()
                 .stream()
                 .map(this::getMessage)
-                .collect(Collectors.toList());
+                .toList();
 
         return new ErrorResponse(messages);
     }

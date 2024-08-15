@@ -1,9 +1,10 @@
 package app.car.cap03.domain;
 
 
-import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 
 @Service
 public class TravelService {
@@ -15,7 +16,7 @@ public class TravelService {
 
     public TravelRequest saveTravelRequest(TravelRequest travelRequest) {
         travelRequest.setStatus(TravelRequestStatus.CREATED);
-        travelRequest.setCreationDate(new Date());
+        travelRequest.setCreationDate(LocalDateTime.now());
         return travelRequestRepository.save(travelRequest);
     }
 

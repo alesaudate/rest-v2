@@ -1,8 +1,9 @@
 package app.car.cap08.interfaces.incoming.output;
 
 import app.car.cap08.domain.TravelRequestStatus;
-import java.util.Date;
 import lombok.Data;
+
+import java.time.LocalDateTime;
 
 @Data
 public class TravelRequestOutput {
@@ -11,7 +12,7 @@ public class TravelRequestOutput {
     String origin;
     String destination;
     TravelRequestStatus status;
-    Date creationDate;
+    LocalDateTime creationDate;
 
 
 }

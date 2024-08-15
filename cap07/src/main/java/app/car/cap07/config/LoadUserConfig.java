@@ -6,8 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 import java.util.Arrays;
+import java.util.List;
 
 @Configuration
 public class LoadUserConfig {
@@ -23,7 +24,7 @@ public class LoadUserConfig {
     public void init() {
         User admin = new User();
         admin.setPassword(passwordEncoder.encode("password"));
-        admin.setRoles(Arrays.asList("ROLE_ADMIN"));
+        admin.setRoles(List.of("ROLE_ADMIN"));
         admin.setUsername("admin");
         admin.setEnabled(true);
 

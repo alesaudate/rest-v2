@@ -9,7 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
 import org.springframework.test.context.ActiveProfiles;
 
@@ -27,7 +27,7 @@ import static org.hamcrest.Matchers.notNullValue;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureWireMock(port = WireMockConfiguration.DYNAMIC_PORT)
 @ActiveProfiles("test")
-public class TravelRequestAPITestIT {
+class TravelRequestAPITestIT {
 
 
     @LocalServerPort
@@ -37,14 +37,14 @@ public class TravelRequestAPITestIT {
     private WireMockServer server;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         RestAssured.baseURI = "https://localhost:" + port;
         RestAssured.authentication = basic("admin", "password");
         RestAssured.useRelaxedHTTPSValidation();
     }
 
     @Test
-    public void testFindNearbyTravelRequests() {
+    void testFindNearbyTravelRequests() {
 
         setupServer();
         String passengerId =
@@ -94,7 +94,7 @@ public class TravelRequestAPITestIT {
     }
 
 
-    public void setupServer() {
+    void setupServer() {
 
         server.stubFor(get(urlPathEqualTo("/maps/api/directions/json"))
                 .withQueryParam("origin", equalTo("Avenida Paulista, 900"))

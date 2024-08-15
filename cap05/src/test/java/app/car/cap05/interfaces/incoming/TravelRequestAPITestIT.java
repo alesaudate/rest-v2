@@ -1,29 +1,31 @@
 package app.car.cap05.interfaces.incoming;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
-import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
 import org.springframework.test.context.ActiveProfiles;
+
 import java.util.HashMap;
 import java.util.Map;
 
+import static app.car.cap05.infrastructure.FileUtils.loadFileContents;
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
+import static com.github.tomakehurst.wiremock.core.Options.DYNAMIC_PORT;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
-import static app.car.cap05.infrastructure.FileUtils.loadFileContents;
+import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@AutoConfigureWireMock(port = WireMockConfiguration.DYNAMIC_PORT)
+@SpringBootTest(webEnvironment = RANDOM_PORT)
+@AutoConfigureWireMock(port = DYNAMIC_PORT)
 @ActiveProfiles("test")
-public class TravelRequestAPITestIT {
+class TravelRequestAPITestIT {
 
     @LocalServerPort
     private int port;
@@ -32,12 +34,12 @@ public class TravelRequestAPITestIT {
     private WireMockServer server;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         RestAssured.port = port;
     }
 
     @Test
-    public void testFindNearbyTravelRequests() {
+    void testFindNearbyTravelRequests() {
 
         setupServer();
         String passengerId =given()
@@ -83,7 +85,7 @@ public class TravelRequestAPITestIT {
                 ;
     }
 
-    public void setupServer() {
+    void setupServer() {
 
         server.stubFor(get(urlPathEqualTo("/maps/api/directions/json"))
             .withQueryParam("origin", equalTo("Avenida Paulista, 900"))
